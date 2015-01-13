@@ -10,12 +10,12 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 CalcFusion brings flexibility by utilizing Excel computations and functions as a backend system to your existing WordPress site. 
 
 == Description ==
-*What is CalcFusion?*
+= What is CalcFusion? =
 
 A Computation Engine that...
-ü lets users create business rules and formulas with Excel.
-ü mixes live data from your WordPress site with local data stored on Excel.
-ü receives data and sends computed results from/to your WordPress site via web services.
+* lets users create business rules and formulas with Excel.
+* mixes live data from your WordPress site with local data stored on Excel.
+* receives data and sends computed results from/to your WordPress site via web services.
 
 For more information, visit us at http://calcfusion.com/
 
@@ -24,6 +24,7 @@ I. Installation
 There are 3 ways you can install the CalcFusion Plugin for Wordpress, each section below provides a step-by-step guide for each method.
 
 A. Automatic Plugin Installation using WordPress Admin
+
 1. Login to WordPress Admin.
 2. From the Admin Panel, select Plugins.
 3. Click Add New.
@@ -63,14 +64,14 @@ Once the plugin has been installed, you need to setup your CalcFusion parameters
 5. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
 
 == Frequently Asked Questions ==
-*On which WordPress PHP version will the plugin work?*
+= On which WordPress PHP version will the plugin work? =
 The plugin only works for WordPress PHP version 5.5 or higher.  Certain features may not work depending on your WordPress PHP version and setting.
 If you are running WordPress in a lower version, please contact us and we can provide you with a solution for your version.
 
-*Does CalcFusion provide methods for both synchronous and asynchronous web service calls?*
+= Does CalcFusion provide methods for both synchronous and asynchronous web service calls? =
 Yes, CalcFusion provides methods for both synchronous and asynchronous web service calls. To enable asynchronous calls, the CURL AsynchDNS setting must be set to "Yes".
 
-*My CalcFusion computations are not being refreshed, what do I do?*
+= My CalcFusion computations are not being refreshed, what do I do? =
 For performance, web hosting service providers (such as WordPress) implement aggressive caching.
 To be able to refresh your CalcFusion computations, a solution is to implement caching exclusions on pages or file paths that should not be cached.
 You can check on how caching exclusions can be done, or you can contact your service provider for assistance.
