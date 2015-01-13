@@ -25,8 +25,7 @@ For more information, visit us at http://calcfusion.com/
 
 There are 3 ways you can install the CalcFusion Plugin for Wordpress, each section below provides a step-by-step guide for each method.
 
-__A. Automatic Plugin Installation using WordPress Admin__
-
+####A. Automatic Plugin Installation using WordPress Admin
 1. Login to WordPress Admin.
 1. From the Admin Panel, select Plugins.
 1. Click Add New.
@@ -35,49 +34,48 @@ __A. Automatic Plugin Installation using WordPress Admin__
 1. A popup window will be displayed, asking you to confirm if you want to install the plugin. Click OK.
 1. WordPress will then download and install the plugin. Click Activate Plugin to activate it.
 
-__B. Manual Plugin Installation using WordPress Admin__
-
+####B. Manual Plugin Installation using WordPress Admin
 This method can be used if you have already downloaded the CalcFusion Plugin in .zip format (click [here](https://downloads.wordpress.org/plugin/calcfusion-for-wp.zip) to download the plugin).
-2. Login to WordPress Admin.
-2. From the Admin Panel, select Plugins.
-2. Click Add New.
-2. Click Upload Plugin.
-2. Click Choose File and select the .zip file.
-2. WordPress will then decompress the file and install the plugin. Click Activate Plugin to activate it.
 
-__C. Manual Plugin Installation using FTP__
+1. Login to WordPress Admin.
+1. From the Admin Panel, select Plugins.
+1. Click Add New.
+1. Click Upload Plugin.
+1. Click Choose File and select the .zip file.
+1. WordPress will then decompress the file and install the plugin. Click Activate Plugin to activate it.
 
+####C. Manual Plugin Installation using FTP
 This method requires FTP familiarity and can be used if you have already downloaded the CalcFusion Plugin in .zip format (click [here](https://downloads.wordpress.org/plugin/calcfusion-for-wp.zip) to download the plugin).
-3. After downloading the .zip file, extract the plugin folder (calcfusion-for-wp) to your desktop.
-3. Login to your WordPress host using an FTP program.
-3. Upload the calcfusion-for-wp folder (from your desktop) to the wp-content/plugins folder in your WordPress directory.
-3. Login to WordPress Admin.
-3. From the Admin Panel, select Plugins.
-3. From the list of installed plugins, search for CalcFusion Plugin for Wordpress and click Activate to activate it.
+
+1. After downloading the .zip file, extract the plugin folder (calcfusion-for-wp) to your desktop.
+1. Login to your WordPress host using an FTP program.
+1. Upload the calcfusion-for-wp folder (from your desktop) to the wp-content/plugins folder in your WordPress directory.
+1. Login to WordPress Admin.
+1. From the Admin Panel, select Plugins.
+1. From the list of installed plugins, search for CalcFusion Plugin for Wordpress and click Activate to activate it.
 
 ###II. CalcFusion Setup Page
-
 Once the plugin has been installed, you need to setup your CalcFusion parameters.
 
-4. Login to WordPress Admin.
-4. From the Admin Panel, select Settings.
-4. Under Settings, select CalcFusion. The CalcFusion Setup Page will be displayed.
-4. The Setup Page is divided into 2 sections:
+1. Login to WordPress Admin.
+1. From the Admin Panel, select Settings.
+1. Under Settings, select CalcFusion. The CalcFusion Setup Page will be displayed.
+1. The Setup Page is divided into 2 sections:
   a. Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
       It is also in this section where you specify the CalcFusion End Point URL (URL of the web services).
   a. Login Test - The Login Test section provides a way for validating your Account Parameters.
       Just click on the Test button and the Test Result will display whether or not it was able to successfully login to CalcFusion.
-4. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
+1. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
 
 == Frequently Asked Questions ==
-__On which WordPress PHP version will the plugin work?__
-* The plugin only works for WordPress PHP version 5.5 or higher.  Certain features may not work depending on your WordPress PHP version and setting.
+####On which WordPress PHP version will the plugin work?
+The plugin only works for WordPress PHP version 5.5 or higher.  Certain features may not work depending on your WordPress PHP version and setting.
 If you are running WordPress in a lower version, please contact us and we can provide you with a solution for your version.
 
-__Does CalcFusion provide methods for both synchronous and asynchronous web service calls?__
-* Yes, CalcFusion provides methods for both synchronous and asynchronous web service calls. To enable asynchronous calls, the CURL AsynchDNS setting must be set to "Yes".
+####Does CalcFusion provide methods for both synchronous and asynchronous web service calls?
+Yes, CalcFusion provides methods for both synchronous and asynchronous web service calls. To enable asynchronous calls, the CURL AsynchDNS setting must be set to "Yes".
 
-__My CalcFusion computations are not being refreshed, what do I do?__
+####My CalcFusion computations are not being refreshed, what do I do?
 * For performance, web hosting service providers (such as WordPress) implement aggressive caching.
 To be able to refresh your CalcFusion computations, a solution is to implement caching exclusions on pages or file paths that should not be cached.
 You can check on how caching exclusions can be done, or you can contact your service provider for assistance.
