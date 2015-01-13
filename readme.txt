@@ -18,8 +18,7 @@ CalcFusion is a computation engine that lets you integrate your Excel calculatio
 3. Set your CalcFusion account credentials to the Settings (Admin > Settings > CalcFusion)
 
 == Frequently Asked Questions ==
-Please click here to view the CalcFusion FAQ page.
-http://calcfusion.com/more/faq/
+Please click here to view the CalcFusion [FAQ page](http://calcfusion.com/more/faq/).
 
 == Screenshots ==
 1. CalcFusion Setup Page (under Settings > CalcFusion)
