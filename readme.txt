@@ -66,22 +66,25 @@ Once the plugin has been installed, you need to setup your CalcFusion parameters
 3. Under Settings, select CalcFusion. The CalcFusion Setup Page will be displayed.
 4. The Setup Page is divided into 2 sections:
 
-  4.1 Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
+  a. Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
       It is also in this section where you specify the CalcFusion End Point URL (URL of the web services).
-  4.2 Login Test - The Login Test section provides a way for validating your Account Parameters.
+  b. Login Test - The Login Test section provides a way for validating your Account Parameters.
       Just click on the Test button and the Test Result will display whether or not it was able to successfully login to CalcFusion.
       
 5. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
 
 == Frequently Asked Questions ==
 __On which WordPress PHP version will the plugin work?__
+
 The plugin only works for WordPress PHP version 5.5 or higher.  Certain features may not work depending on your WordPress PHP version and setting.
 If you are running WordPress in a lower version, please contact us and we can provide you with a solution for your version.
 
 __Does CalcFusion provide methods for both synchronous and asynchronous web service calls?__
+
 Yes, CalcFusion provides methods for both synchronous and asynchronous web service calls. To enable asynchronous calls, the CURL AsynchDNS setting must be set to "Yes".
 
 __My CalcFusion computations are not being refreshed, what do I do?__
+
 For performance, web hosting service providers (such as WordPress) implement aggressive caching.
 To be able to refresh your CalcFusion computations, a solution is to implement caching exclusions on pages or file paths that should not be cached.
 You can check on how caching exclusions can be done, or you can contact your service provider for assistance.
