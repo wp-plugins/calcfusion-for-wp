@@ -66,9 +66,9 @@ Once the plugin has been installed, you need to setup your CalcFusion parameters
 3. Under Settings, select CalcFusion. The CalcFusion Setup Page will be displayed.
 4. The Setup Page is divided into 2 sections:
 
-   - Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
+  4.1 Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
       It is also in this section where you specify the CalcFusion End Point URL (URL of the web services).
-   - Login Test - The Login Test section provides a way for validating your Account Parameters.
+  4.2 Login Test - The Login Test section provides a way for validating your Account Parameters.
       Just click on the Test button and the Test Result will display whether or not it was able to successfully login to CalcFusion.
       
 5. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
