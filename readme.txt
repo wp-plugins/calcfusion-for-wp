@@ -22,7 +22,7 @@ Please click here to view the CalcFusion FAQ page.
 http://calcfusion.com/more/faq/
 
 == Screenshots ==
-1. CalcFusion Setup Page - http://calcfusion.com/screenshot/calcfusion-wp-setuppage.png
+1. CalcFusion Setup Page - calcfusion-wp-setuppage.png
 
 == Changelog ==
 = 1.0.0 =
