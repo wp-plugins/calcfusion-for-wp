@@ -3,7 +3,7 @@
 /*
  * composer autoload
  */
-require '/vendor/autoload.php';
+require __DIR__.DIRECTORY_SEPARATOR.'vendor/autoload.php';
 
 /*
  * autoload functions does not work inside threads so we need to 
