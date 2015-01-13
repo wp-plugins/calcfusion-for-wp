@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: CalcFusion for WP 
-Plugin URI: http://wordpress.org/plugins/calcfusion-wp/
+Plugin URI: http://wordpress.org/plugins/calcfusion-for-wp/
 Description: This plugin makes it simple to add CalcFusion API to your WordPress
 Version: 1.0.0
 Author: CalcFusion
@@ -249,7 +249,7 @@ class CalcFusionSettingsPage
 	public function add_plugin_page()
 	{
 		// This page will be under "Settings"
-		add_options_page('CalcFusion','CalcFusion','manage_options','calcfusion-wp',array( $this, 'create_admin_page' ));
+		add_options_page('CalcFusion','CalcFusion','manage_options','calcfusion-for-wp',array( $this, 'create_admin_page' ));
 	}
 
 	/**
