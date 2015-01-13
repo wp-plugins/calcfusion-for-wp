@@ -22,7 +22,7 @@ Please click here to view the CalcFusion FAQ page.
 http://calcfusion.com/more/faq/
 
 == Screenshots ==
-1. CalcFusion Setup Page - screenshot-1.png
+1. CalcFusion Setup Page (under Settings > CalcFusion)
 
 == Changelog ==
 = 1.0.0 =
