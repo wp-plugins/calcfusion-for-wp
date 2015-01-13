@@ -10,10 +10,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 CalcFusion brings flexibility by utilizing Excel computations and functions as a backend system to your existing WordPress site. 
 
 == Description ==
-= What is CalcFusion? =
+### What is CalcFusion? =
 
-A Computation Engine that...
-
+A Computation Engine that... 
 * lets users create business rules and formulas with Excel.
 * mixes live data from your WordPress site with local data stored on Excel.
 * receives data and sends computed results from/to your WordPress site via web services.
@@ -21,11 +20,11 @@ A Computation Engine that...
 For more information, visit us at http://calcfusion.com/
 
 == Installation ==
-I. Installation
+### I. Installation
 
 There are 3 ways you can install the CalcFusion Plugin for Wordpress, each section below provides a step-by-step guide for each method.
 
-A. Automatic Plugin Installation using WordPress Admin
+__A. Automatic Plugin Installation using WordPress Admin__
 
 1. Login to WordPress Admin.
 2. From the Admin Panel, select Plugins.
@@ -57,7 +56,7 @@ This method requires FTP familiarity and can be used if you have already downloa
 5. From the Admin Panel, select Plugins.
 6. From the list of installed plugins, search for CalcFusion Plugin for Wordpress and click Activate to activate it.
 
-II. CalcFusion Setup Page
+=II. CalcFusion Setup Page=
 
 Once the plugin has been installed, you need to setup your CalcFusion parameters.
 
@@ -65,12 +64,10 @@ Once the plugin has been installed, you need to setup your CalcFusion parameters
 2. From the Admin Panel, select Settings.
 3. Under Settings, select CalcFusion. The CalcFusion Setup Page will be displayed.
 4. The Setup Page is divided into 2 sections:
-   
    a. Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
       It is also in this section where you specify the CalcFusion End Point URL (URL of the web services).
    b. Login Test - The Login Test section provides a way for validating your Account Parameters.
       Just click on the Test button and the Test Result will display whether or not it was able to successfully login to CalcFusion.
-      
 5. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
 
 == Frequently Asked Questions ==
