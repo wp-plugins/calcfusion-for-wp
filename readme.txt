@@ -60,12 +60,10 @@ Once the plugin has been installed, you need to setup your CalcFusion parameters
 1. Login to WordPress Admin.
 1. From the Admin Panel, select Settings.
 1. Under Settings, select CalcFusion. The CalcFusion Setup Page will be displayed.
-1. The Setup Page is divided into 2 sections:
-:    a. Account Parameters - This is where you enter your CalcFusion credentials (Account ID, User Name, Password (SHA1) and App Key).
-       It is also in this section where you specify the CalcFusion End Point URL (URL of the web services).
-:    a. Login Test - The Login Test section provides a way for validating your Account Parameters.
-       Just click on the Test button and the Test Result will display whether or not it was able to successfully login to CalcFusion.
-1. Save your CalcFusion parameters by clicking Save Changes. You are now ready to use CalcFusion from within WordPress.
+1. Enter your CalcFusion credentials and specify the CalcFusion End Point URL.
+1. Save your account parameters by clicking Save Changes. 
+1. Validate your account parameters by clicking on the Test button. The Test Result will display whether or not you were able to successfully login to CalcFusion.
+
 
 == Frequently Asked Questions ==
 ####On which WordPress PHP version will the plugin work?
@@ -76,7 +74,7 @@ If you are running WordPress in a lower version, please contact us and we can pr
 Yes, CalcFusion provides methods for both synchronous and asynchronous web service calls. To enable asynchronous calls, the CURL AsynchDNS setting must be set to "Yes".
 
 ####My CalcFusion computations are not being refreshed, what do I do?
-* For performance, web hosting service providers (such as WordPress) implement aggressive caching.
+For performance, web hosting service providers (such as WordPress) implement aggressive caching.
 To be able to refresh your CalcFusion computations, a solution is to implement caching exclusions on pages or file paths that should not be cached.
 You can check on how caching exclusions can be done, or you can contact your service provider for assistance.
 
