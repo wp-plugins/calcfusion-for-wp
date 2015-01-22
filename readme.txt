@@ -26,7 +26,7 @@ Writing complex functions on Excel is straightforward due to its spreadsheet int
 Cut the development time in half by designing your web app interface on WordPress and using CalcFusion and Excel as you back-end. Use real-time data for your computations, and display Excel computed results instantly on WordPress.
 
 = How does it Work? =
-[image http://calcfusion.com/screenshot/HowItWorks_Wordpress.jpg]
+[http://calcfusion.com/screenshot/HowItWorks_Wordpress.jpg]
 
 = Try our live implementation of CalcFusion for WP at http://calcfusion.com/live-demo/ =
 
