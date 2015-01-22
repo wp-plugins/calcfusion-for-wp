@@ -20,13 +20,14 @@ A Computation Engine that...
 
 = Learn more about CalcFusion at http://calcfusion.com/ =
 
+
 = Why CalcFusion? =
-CalcFusion leverages on Excel’s power and flexibility.
+CalcFusion leverages on Excel's power and flexibility.
 Writing complex functions on Excel is straightforward due to its spreadsheet interface that allows for easy modifications and testing, while writing codes for the same functions can be unpredictable and tedious as programmers have to make sure that their codes are well tested and maintainable.
 Cut the development time in half by designing your web app interface on WordPress and using CalcFusion and Excel as you back-end. Use real-time data for your computations, and display Excel computed results instantly on WordPress.
 
 = How does it Work? =
-[youtube http://youtu.be/2_OqsgaUIwc;w=560&#038;h=315&#038;rel=0]
+[youtube https://www.youtube.com/watch?x-yt-cl=84411374&v=2_OqsgaUIwc&x-yt-ts=1421828030&feature=player_embedded]
 
 = Try our live implementation of CalcFusion for WP at http://calcfusion.com/live-demo/ =
 
