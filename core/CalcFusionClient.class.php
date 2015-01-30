@@ -1,5 +1,6 @@
 <?php
 
+use Httpful\Mime;
 /*
  * composer autoload
  */
@@ -102,36 +103,51 @@ class CalcFusionClient  {
                
 	}
         
-        /*
-         * implementation for method that is executed when calling a method that does not exist;
-         * we are using this method to implement method overloading by number of parameters
-         * 
-         */
-        public function __call($name, $args) {
-           $method = $name."_".count($args);
-            if (!method_exists($this,$method)) {
-                 throw new Exception("Call to undefined method ".get_class($this)."::$method");
-            }
-            return call_user_func_array(array($this,$method),$args);
-          }
+    /**
+    * implementation for method that is executed when calling a method that does not exist;
+    * we are using this method to implement method overloading by number of parameters
+    * 
+    */
+	public function __call($name, $args) {
+		$method = $name."_".count($args);
+		if (!method_exists($this,$method)) {
+			throw new Exception("Call to undefined method ".get_class($this)."::$method");
+		}
+		return call_user_func_array(array($this,$method),$args);
+	}
   
-        
-       /**
-	 * This method manages the client authentication process and gets an Access Token 
-        * from the response.
-	 * 
+	/**
+	 * This method manages the client authentication process and gets an Access Token
+	 * from the response.
+	 *
 	 * @param string $username The Client User Name
 	 * @param string $password The Client User Password
 	 * @param string $accountId The Client Account ID
 	 * @param string $appkey The Client App Key
-	 * @return string A valid Access Token if authentication is valid, otherwise it returns an error message 
-	 * 
+	 * @return string A valid Access Token if authentication is valid, otherwise it returns an error message
+	 *
 	 */
-	public function login($username, $password, $accountId, $appkey){				
-            $errorObj = null;
-            if(!$this->url){
-                $errorObj = $this->createErrorObj(CalcFusionClient::RESPONSE_400, CalcFusionClient::RESPONSE_2004_MSG);
-            }
+	public function login_4($username, $password, $accountId, $appkey){
+		return $this->login($username, $password, $accountId, $appkey, array());
+	}
+          
+	/**
+	* This method manages the client authentication process and gets an Access Token 
+	* from the response.
+	* 
+	* @param string $username The Client User Name
+	* @param string $password The Client User Password
+	* @param string $accountId The Client Account ID
+	* @param string $appkey The Client App Key
+	* @param array $parameters Additional query parameters to pass
+	* @return string A valid Access Token if authentication is valid, otherwise it returns an error message 
+	* 
+	*/
+	public function login_5($username, $password, $accountId, $appkey, array $parameters){				
+		$errorObj = null;
+		if(!$this->url){
+			$errorObj = $this->createErrorObj(CalcFusionClient::RESPONSE_400, CalcFusionClient::RESPONSE_2004_MSG);
+		}
 		else if(!$username){
                     $errorObj = $this->createErrorObj(CalcFusionClient::RESPONSE_400, CalcFusionClient::RESPONSE_1010_MSG);
 		}
@@ -147,40 +163,40 @@ class CalcFusionClient  {
 		}
 		
 		$requestId = Oauth2ClientUtils::getUniqueId();
-                $queryString=array();
-                $queryString["username"]=$username;
-                $queryString["password"]=$password;
-                $queryString["accountId"]=$accountId;
-                $queryString["appkey"]=$appkey;
-               	$queryString[CalcFusionClient::CONTEXTINFO_PARAM]=$this->getContextInfoParam();
-                
-                $queryString["requestId"]=$requestId;
-                
-                $host=$this->url."/token?".http_build_query($queryString); 
-                
-                $response = \Httpful\Request::get($host)                  
+		if(!$parameters || !is_array($parameters)){
+			$parameters = array();
+		}
+		
+		$parameters["username"] = $username;
+		$parameters["password"] = $password;
+		$parameters["accountId"] = $accountId;
+		$parameters["appkey"] = $appkey;
+		$parameters[CalcFusionClient::CONTEXTINFO_PARAM] = $this->getContextInfoParam();
+		$parameters["requestId"] = $requestId;
+		$host = $this->url."/token?".http_build_query($parameters); 
+		$response = \Httpful\Request::get($host)                  
                       ->sendsJson()                                                  
                       ->expects(\Httpful\Mime::JSON)
-                        ->timeout(10)
+                      ->timeout(10)
                       ->send();                 
                 
 		$status = $response->code;
-                $jsonResponse=json_decode($response, true);
+		$jsonResponse=json_decode($response, true);
                 
 		if ($status != 200){
-                    return json_encode($this->createErrorResponse($this->createStatusResponse($status)));
-                }                  
+			return json_encode($this->createErrorResponse($this->createStatusResponse($status)));
+		}                  
 		else {
-                        $responseData= $jsonResponse;
-                        $resultResponseStr=$responseData["response"];
-                        $resultResponseStatus=isset($resultResponseStr["status"])?$resultResponseStr["status"]:false;
+			$responseData= $jsonResponse;
+			$resultResponseStr=$responseData["response"];
+			$resultResponseStatus=isset($resultResponseStr["status"])?$resultResponseStr["status"]:false;
                         
-                       if($resultResponseStatus && strtoupper($resultResponseStatus)=='OK'){
-                            $clientInfoStr = $responseData["data"];
-                            $this->clientTokenInfo = ClientAccessTokenInfo::getObjFromAssArray($clientInfoStr);
-                            $this->appKey = $appkey;
+			if($resultResponseStatus && strtoupper($resultResponseStatus)=='OK'){
+				$clientInfoStr = $responseData["data"];
+				$this->clientTokenInfo = ClientAccessTokenInfo::getObjFromAssArray($clientInfoStr);
+				$this->appKey = $appkey;
 			}
-                }
+		}
 		return json_encode($jsonResponse);
 	}
 	
@@ -191,30 +207,30 @@ class CalcFusionClient  {
      * then the accessToken in the clientTokenInfo will be use. 
 	 * @param array $parameters
 	 * @return string A new Access Token if it has been successfully refreshed, 
-         * otherwise it returns an error message
+	 * otherwise it returns an error message
 	 * 
 	 */
 	public function refreshToken(array $parameters=null){
 		
 		if(!$parameters || !is_array($parameters)){
-                    $parameters=array();
-                }
+			$parameters=array();
+		}
 		
 		if (!isset($parameters["accessToken"])){
-                    $parameters["accessToken"]=$this->clientTokenInfo->getAccessToken();
-                }
+			$parameters["accessToken"]=$this->clientTokenInfo->getAccessToken();
+		}
 		
 		$result = $this->requestService("token/refresh", "GET", $parameters);
                 
 		$resultData=  json_decode($result, true);                
-                $responseStr=  $resultData["response"];
-                $responseStatus=$responseStr["status"];
+		$responseStr=  $resultData["response"];
+		$responseStatus=$responseStr["status"];
                 
-                if (strtoupper($responseStatus)=="OK"){
-                    $clientInfoStr=$resultData["data"];
-                    $this->clientTokenInfo = ClientAccessTokenInfo::getObjFromAssArray($clientInfoStr);
-                }
-                
+		if (strtoupper($responseStatus)=="OK"){
+			$clientInfoStr=$resultData["data"];
+			$this->clientTokenInfo = ClientAccessTokenInfo::getObjFromAssArray($clientInfoStr);
+		}
+		
 		return $result;
 	}
         
@@ -262,7 +278,7 @@ class CalcFusionClient  {
              if(!$method){
                 $errorObj = $this->createErrorObj(CalcFusionClient::RESPONSE_405,
                         CalcFusionClient::RESPONSE_2006_MSG);			
-            } else if (!in_array(strtoupper($method), array("GET", "POST")))  {
+            } else if (!in_array(strtoupper($method), array("GET", "POST", "DOWNLOAD")))  {
                   $errorObj = $this->createErrorObj(CalcFusionClient::RESPONSE_406,
                         CalcFusionClient::RESPONSE_2007_MSG);
             }          		
@@ -299,16 +315,15 @@ class CalcFusionClient  {
                    $response = \Httpful\Request::post($host)                  
                         ->sendsType(Mime::FORM)                              
                         ->authenticateWith($accessToken, $newAccessToken)  
-                        ->body(json_encode($parameters))            
+                        ->body($parameters)            
                         ->addHeaders(array(
                             'DATE' => $requestDate,             
                         ))
                         ->expects(\Httpful\Mime::JSON)
-                           ->timeout(10)
+                        ->timeout(10)
                         ->send();
             }
-            
-          
+           
             $status=$response->code;   
             if ($status != 200){               
                     return  json_encode($this->createErrorResponse($this->createStatusResponse($status), $parameters));        
@@ -355,7 +370,6 @@ class CalcFusionClient  {
 	 */
 	public function asyncCallbackResult($asyncRequestId,  $result)
 	{
-		//System.out.println(" >>>>>>>>>>>>>>>>>>>>>>>>> RESULT CALLBACK FUNCTION : " + asyncRequestId);
 		$this->resultStorage[$asyncRequestId]=$result;
 	}
 	
@@ -412,7 +426,7 @@ class CalcFusionClient  {
             return $returnValue;
 	}
         
-        /*
+	/**
 	 * This method generate standard result data for errors.
 	 * @param string $errorObj
 	 * @param array $parameters
