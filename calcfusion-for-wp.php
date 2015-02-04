@@ -91,35 +91,6 @@ function getAdminNotices()
 	}
 }
 
-add_action( 'wp_calcfusion_request_service', 'wp_calcfusion_request_service' );
-$wp_calcfusion_client = null;
-$wp_clientTokenInfo = null;
-function wp_calcfusion_request_service($servicePath, $method, array $parameters) {
-	
-	global $wp_calcfusion_client;
-	global $wp_clientTokenInfo;
-	
-	if($wp_clientTokenInfo == null || $wp_calcfusion_client == null)
-	{
-		$wp_calcfusion_client = new CalcFusionClient(CALCFUSIONWP_API_URL);
-		$output = $wp_calcfusion_client->login(CALCFUSIONWP_USERNAME, CALCFUSIONWP_PASSWORD, CALCFUSIONWP_ACCTID, CALCFUSIONWP_APPKEY);
-		
-		if($output != null)
-		{
-			$responseData=json_decode($output, true);
-			$clientInfoStr = $responseData["data"];
-			$wp_clientTokenInfo = ClientAccessTokenInfo::getObjFromAssArray($clientInfoStr);
-			$result = $wp_calcfusion_client->requestService($servicePath, $method, $parameters);
-		}
-	}
-	else
-	{
-		$result = $wp_calcfusion_client->requestService($servicePath, $method, $parameters);
-	}
-	
-	return $result;
-}
-
 // check the minimum required version and server settings
 function checkVersionRequired()
 {
@@ -224,13 +195,42 @@ function get_curlSettings()
 			return $phpinfo['curl']['cURL support'];
 }
 
+add_action( 'wp_ajax_calcfusion_request_service', 'calcfusion_request_service');
+add_action( 'wp_ajax_nopriv_calcfusion_request_service', 'calcfusion_request_service');
+function calcfusion_request_service() {
+	$servicePath = sanitize_text_field($_POST["servicePath"]);
+	$method = sanitize_text_field($_POST["method"]);
+	$parameters = $_POST["parameters"];
+
+	$cf_client = new CalcFusionClient(CALCFUSIONWP_API_URL);
+	$output = $cf_client->login(CALCFUSIONWP_USERNAME, CALCFUSIONWP_PASSWORD, CALCFUSIONWP_ACCTID, CALCFUSIONWP_APPKEY);
+
+	if($output)
+	{
+		$params =array();
+		$params["cfxlFrom"]="CFXL";
+		foreach($parameters as $key => $value)
+		{
+			$value = str_replace("\\\"", "\"", $value);
+			$params[$key] = htmlentities ( trim ( $value ) , ENT_NOQUOTES );
+		}
+		
+		$result = $cf_client->requestService($servicePath, $method, $params);
+		echo $result;
+	}
+
+	die();
+}
+
 class CalcFusionSettingsPage
 {
 	/**
 	 * Holds the values to be used in the fields callbacks
 	 */
 	private $options;
-
+	private $userId;
+	public $cf_client;
+	
 	/**
 	 * Start up
 	 */
@@ -239,10 +239,16 @@ class CalcFusionSettingsPage
 		add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'page_init' ) );
 		
+		// register wp ajax functions 
+		add_action( 'wp_ajax_calcfusion_action_login', array( $this,'calcfusion_action_login'));
+		add_action( 'wp_ajax_calcfusion_action_computation_list', array( $this,'calcfusion_action_computation_list'));
+		add_action( 'wp_ajax_calcfusion_action_download', array( $this,'calcfusion_action_download'));
+		
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('json2');
+		wp_enqueue_script( 'cf_sha1_script', plugin_dir_url( __FILE__ ) . '/js/jquery.sha1.js' );
 	}
-
+	
 	/**
 	 * Add options page
 	 */
@@ -280,40 +286,72 @@ class CalcFusionSettingsPage
             ?>
             </form>
         </div>
-        <hr/>
-
 		<div class="wrap">
-		<h3>Login Test</h3>
-		<input type="button" class="button-primary" value="Test" style="display: inline;" onclick="doTestLogin()"/>
-		<p class="description" style="display: inline;">Check if your Account Parameters are correct.</p>
-		<h4><div id="login-test-result"/></h4>
+			<input type="button" class="button-primary" value="Login" style="width:104px; display: inline;" onclick="doTestLogin()"/>
+			<p class="description" style="display: inline;">Check if your Account Parameters are correct. Also to enable the Computation Management below.</p>
+			<h4><div id="login-test-result"/></h4>
+		</div>
+		
+		<hr/>
+		<div class="wrap">
+			<h3>Computation Management</h3>
+			<div>
+				<div style="display:inline-block;font-weight: bold;">Computation: </div>
+				<select id="computationList" style="width: 200px;" onchange="enableUploadButton()" disabled >
+					<option value="0">-- Select Computation --</option>
+				</select>
+				<div style="height:10px;"></div>
+				<div style="font-weight: bold;">Upload</div>
+				<form id="fileUploadForm" target="uploadFrame" action="http://localhost:9090/calcfusion/pages/clientfileupload.jsp" method="post" enctype="multipart/form-data">
+				    <input type="hidden" name="return" value="<?php echo plugin_dir_url( __FILE__ ).'uploadcomplete.php'?>"/>
+				    <input type="hidden" name="active" value="1"/>
+				    <input type="hidden" name="acctid" value="<?php echo isset( $this->options['calcfusion_property_acctid'] ) ? absint( $this->options['calcfusion_property_acctid']) : '0'; ?>"/>
+				    <input type="hidden" id="userId" name="userid" value="0"/>
+				    <input type="hidden" id="computeId" name="computeid" value="0"/>
+				    <p style="font-size: 12px;display: inline;">Upload Spreadsheet (.xlsx)</p>
+				    <input id="uploadFile" type="file" name="uploadFile" accept=".xlsx" style="border: 1px solid #c4c4c4;" onchange="enableUploadButton()" disabled/>
+				    <div style="display: inline-block;vertical-align: bottom;">
+				   		<input id="uploadBtn" type="submit" value="Upload" name="submit" style="vertical-align: middle;" disabled>
+				   	</div>
+				   	<div id="fileuploadAuditResult" style="display: inline;padding-left: 10px;font-size: 12px;"></div>
+				   	<iframe name="uploadFrame" src="" frameborder="0" scrolling="no" height="0px" width="0px"></iframe>
+				</form>
+				
+				<div style="height:10px;"></div>
+				<div style="font-weight: bold;">Download</div>
+				<div style="text-align: left;margin: 0px;vertical-align: bottom;padding: 0px;" disabled>
+					<a href="javascript:onFileDownload();"><img alt="" src="<?php echo plugin_dir_url( __FILE__ ).'images/ico24_download.png'?>"/></a>
+					<span> Excel File</span>
+				 </div>
+			 </div>
 		</div>
 		
 		<script type="text/javascript">
 		var $ = jQuery.noConflict();
+		var userId = 0;
 		function doTestLogin()
 		{
 			var date = new Date();
 			var testTime = date.getMilliseconds();
-			
-			var params  = {};
-			params.username = $('#calcfusion_property_username').val();
-			params.password = $('#calcfusion_property_password').val();
-			params.accountId = $('#calcfusion_property_acctid').val();
-			params.appkey = $('#calcfusion_property_appkey').val(); 
-			params.apiURL = $('#calcfusion_property_api_url').val(); 
-		
-			var loginURL = "<?php echo plugin_dir_url( __FILE__ ).'logintest.php'?>";
-			$.get(loginURL, params, function(data) {
+			var ajaxdata = createAjaxSecParam('calcfusion_action_login');
+			$.post(ajaxurl, ajaxdata, function(data) {
 				if(data != null)
 				{
 					var response = data.response;
 					if(response != null)
 					{
 						if(response.status == "OK")
+						{
 							$("#login-test-result").empty().append("Login successful " + testTime/1000 + " seconds");
+							$("#computationList").removeAttr("disabled");
+							$("#uploadFile").removeAttr("disabled");
+							userId = data.data.clientApp.user.userId;
+							$("#userId").val(userId);
+							$("#userId").val($('#calcfusion_property_acctid').val());
+							
+							getComputationList();
+						}
 						else
-		
 							$("#login-test-result").empty().append(response.errorMessage);
 					}
 				}
@@ -323,6 +361,95 @@ class CalcFusionSettingsPage
 				alert("error" + data);
 			}, "json");
 		}
+
+		function getComputationList()
+		{
+			var ajaxdata = createAjaxSecParam('calcfusion_action_computation_list');
+			$.post(ajaxurl, ajaxdata, function(data) {
+				if(data != null)
+				{
+					$("#computationList").empty().append("<option value=\"0\">-- Select Computation --</option>");
+					$.each( data.resultList, function( index, dataObj ) {
+						var folderOpt = "<option value=\""+ dataObj.bob_id +"\">"+ encodeStringValue(dataObj.bob_label) +"</option>";
+						$("#computationList").append(folderOpt);
+					});
+				}
+			}, "json")
+			.fail(function(data) {
+				alert("Request Failed!");
+			}, "json");
+		}
+
+		function createAjaxSecParam(action)
+		{
+			var password = $('#calcfusion_property_password').val();
+			if(!is_sha1(password))
+				password = $.sha1(password);
+				
+			var ajaxdata = {'action': action,
+					'accountId': $('#calcfusion_property_acctid').val(),
+					'username' : $('#calcfusion_property_username').val(),
+					'password' : password,
+					'appkey': $('#calcfusion_property_appkey').val(),
+					'apiURL': $('#calcfusion_property_api_url').val()};
+			
+			return ajaxdata;
+		}
+		
+		function encodeStringValue(value)
+		{
+			value = replaceAll("&", "&amp;", value);
+			value = replaceAll("<", "&lt;", value);
+			value = replaceAll(">", "&gt;", value);
+			value = replaceAll('"', "&quot;", value);
+			value = replaceAll("'", "&apos;", value);
+			
+			return value;
+		}
+
+		function replaceAll(find, replace, str) {
+			  return str.replace(new RegExp(find, 'g'), replace);
+		}
+
+		function is_sha1(str)
+		{
+			return /\b[0-9a-f]{40}\b/.test(str);
+		}
+		
+		function enableUploadButton()
+		{
+			$("#computeId").val($("#computationList").val());
+			if($("#computationList").val() != 0 && $("#uploadFile").val() != "")
+				$("#uploadBtn").removeAttr("disabled");
+			else
+				$("#uploadBtn").attr("disabled", "disabled");
+		} 
+
+		function onFileUploadComplete(computeId, version, result)
+		{
+			if(result == "OK")
+				$("#fileuploadAuditResult").empty().append("File upload successful!");
+			else
+				$("#fileuploadAuditResult").empty().append(result);
+		}
+
+		function onFileDownload(){
+			if($('#computationList').val() > 0)
+			{
+				var ajaxdata = createAjaxSecParam('calcfusion_action_download');
+				ajaxdata.computeId = $('#computationList').val();
+				ajaxdata.userId = userId;
+				$.post(ajaxurl, ajaxdata, function(data) {
+					$("body").append(data);
+				})
+				.fail(function(data) {
+					alert("Request Failed!");
+				});
+			}
+			else
+				alert("Please select a computation to download.");
+		}
+		
 		</script>
         <?php
     }
@@ -354,7 +481,7 @@ class CalcFusionSettingsPage
 
         add_settings_field(
 	        'calcfusion_property_password',
-	        'Password (SHA1):',
+	        'Password:',
 	        array( $this, 'password_callback' ),
 	        'calcfusion-setting-admin',
 	        'setting_section_id'
@@ -392,7 +519,12 @@ class CalcFusionSettingsPage
             $new_input['calcfusion_property_username'] = sanitize_email( $input['calcfusion_property_username'] );
         
         if( isset( $input['calcfusion_property_password'] ) )
-        	$new_input['calcfusion_property_password'] = sanitize_text_field( $input['calcfusion_property_password'] );
+        {
+        	if($this->is_sha1($input['calcfusion_property_password']))
+        		$new_input['calcfusion_property_password'] = sanitize_text_field( $input['calcfusion_property_password']);
+        	else 
+        		$new_input['calcfusion_property_password'] = sha1(sanitize_text_field( $input['calcfusion_property_password']));
+        }
         
         if( isset( $input['calcfusion_property_appkey'] ) )
         	$new_input['calcfusion_property_appkey'] = sanitize_text_field( $input['calcfusion_property_appkey'] );
@@ -403,6 +535,13 @@ class CalcFusionSettingsPage
         return $new_input;
     }
 
+    /**
+     * Check if string is already in SHA1
+     */
+    public function is_sha1( $str ) {
+		return ( bool ) preg_match( '/^[0-9a-f]{40}$/i', $str );
+	}
+    
     /** 
      * Print the Section text
      */
@@ -444,7 +583,7 @@ class CalcFusionSettingsPage
     		'<input type="password" id="calcfusion_property_password" style="width: 400px;"  name="calcfusion-wp-options[calcfusion_property_password]" value="%s" maxlength="50"/>',
     		isset( $this->options['calcfusion_property_password'] ) ? esc_attr( $this->options['calcfusion_property_password']) : ''
     	);
-    	printf('<p class="description">The SHA1 value of your password</p>');
+    	printf('<p class="description">Enter your password</p>');
     }
     
     /**
@@ -467,5 +606,115 @@ class CalcFusionSettingsPage
 	    	'<input type="text" id="calcfusion_property_api_url" style="width: 400px;" name="calcfusion-wp-options[calcfusion_property_api_url]" value="%s" maxlength="100"/>',
 	    	isset( $this->options['calcfusion_property_api_url'] ) ? esc_url( $this->options['calcfusion_property_api_url']) : 'https://api.calcfusion.com/calcfusion/rest'
     	);
+    }
+    
+    /**
+     * WP Ajax Calcfusion login callback function
+     */
+    public function calcfusion_action_login() {
+    	
+    	$accountId = absint($_POST["accountId"]);
+    	$username = sanitize_email($_POST["username"]);
+    	$password = sanitize_text_field($_POST["password"]);
+    	$appkey = sanitize_text_field($_POST["appkey"]);
+    	$apiURL = sanitize_text_field($_POST["apiURL"]);
+    
+    	$cf_client = new CalcFusionClient($apiURL);
+    	$output = $cf_client->login($username, $password, $accountId, $appkey);
+    
+    	if($output)
+    	{
+    		$responseData= json_decode($output, true);
+    		$clientInfoStr = $responseData["data"];
+    		$clientTokenInfo = ClientAccessTokenInfo::getObjFromAssArray($clientInfoStr);
+    		$this->userId = $clientTokenInfo->getClientApp()->getAuthorizedUser()->getUserId();
+    	}
+    
+    	echo $output;
+    	exit;
+    }
+    
+    /**
+     * WP Ajax Calcfusion computation list callback function
+     */
+    public function calcfusion_action_computation_list()
+    {
+    	$accountId = absint($_POST["accountId"]);
+    	$username = sanitize_email($_POST["username"]);
+    	$password = sanitize_text_field($_POST["password"]);
+    	$appkey = sanitize_text_field($_POST["appkey"]);
+    	$apiURL = sanitize_text_field($_POST["apiURL"]);
+    	
+    	$cf_client = new CalcFusionClient($apiURL);
+    	$output = $cf_client->login($username, $password, $accountId, $appkey);
+    	
+    	if($output)
+    	{
+	    	$param = array();
+	    	$param["filterXML"] = "";
+	    	$computationList = $cf_client->requestService("computations/folder/list", "GET", $param);
+    	}
+    	
+    	echo $computationList;
+    	exit;
+    }
+    
+    /**
+     * WP Ajax Calcfusion download callback function
+     */
+    public function calcfusion_action_download()
+    {
+    	$accountId = absint($_POST["accountId"]);
+    	$username = sanitize_email($_POST["username"]);
+    	$password = sanitize_text_field($_POST["password"]);
+    	$appkey = sanitize_text_field($_POST["appkey"]);
+    	$apiURL = sanitize_text_field($_POST["apiURL"]);
+    	$computeID = absint($_POST["computeId"]);
+    	$userId = absint($_POST["userId"]);
+    
+    	$cf_client = new CalcFusionClient($apiURL);
+    	$result = $cf_client->login($username, $password, $accountId, $appkey);
+    	
+    	if($result)
+    	{
+    		$_REQUEST["cfxlFrom"]="CFXL";
+    		$_REQUEST["filterXML"]= "<filter><field name=\"cdo_bob_fold_fk\" andor=\"AND\" operator=\"=\" value=\"".$computeID."\"/></filter>";
+    			
+    		$param = array();
+    		$param["cfxlFrom"]="CFXL";
+    		$param["filterXML"]= "<filter><field name=\"cdo_bob_fold_fk\" andor=\"AND\" operator=\"=\" value=\"".$computeID."\"/></filter>";
+    			
+    		$result = $cf_client->requestService("computations/file/list", "GET", $param);
+    		if($result)
+    		{
+    			$responseData= json_decode($result, true);
+    			$resultList = $responseData["resultList"];
+    			$fileId = 0;
+    			foreach ($resultList as $object) {
+    				if($object["cdo_active"] == 1)
+    				{
+    					$fileId = $object["bob_id"];
+    					$filename = $object["att_filename"];
+    					break;
+    				}
+    			}
+    
+    			if($fileId != 0)
+    			{
+    				$result = $cf_client->requestService("file/request/".$fileId, "GET", $param);
+    				if($result)
+    				{
+    					$resultObj= json_decode($result, true);
+    					$resultData = $resultObj["data"];
+    					$fileRequestId = $resultData["fileRequestId"];
+    
+    					$source = "$apiURL/file/download/request/$fileRequestId?userId=$userId&accountId=$accountId";
+    					echo "<iframe src='$source'></iframe>";
+    				}
+    			}
+    		}
+    	}
+    	
+    	exit;
     }
 }
