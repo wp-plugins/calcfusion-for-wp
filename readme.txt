@@ -3,7 +3,7 @@ Contributors: CalcFusion
 Tags: computation engine
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,9 +95,23 @@ For more information, please click here to view the CalcFusion [FAQ page](http:/
 1. CalcFusion Setup Page (under Settings > CalcFusion)
 
 == Changelog ==
+= 1.1.0 =
+* Modify CalcFusionClient class 
+* Modify CalcFusion Setup Page
+* Added WP AJAX function "calcfusion_request_service" to be able to trigger a compute from front-end through AJAX/jQuery.
+
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
+= 1.1.0 =
+* Fixed an issue on CalcFusionClient class requestService function with POST method parameter. 
+* Added option to pass custom/additional parameter on CalcFusionClient class login function. 
+* Major changes on CalcFusion Setup Page:
+	- Set password with a non SHA1 value
+	- Change "Test" button label to "Login"
+	- Added Computation Management section
+* Added WP AJAX function "calcfusion_request_service" to be able to trigger a compute from front-end through AJAX/jQuery.
+
 = 1.0.0 =
 * Initial release.
