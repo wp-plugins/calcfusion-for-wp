@@ -96,8 +96,8 @@ For more information, please click here to view the CalcFusion [FAQ page](http:/
 
 == Changelog ==
 = 1.1.0 =
-* Modify CalcFusionClient class 
-* Modify CalcFusion Setup Page
+* Update CalcFusionClient class 
+* Update CalcFusion Setup Page
 * Added WP AJAX function "calcfusion_request_service" to be able to trigger a compute from front-end through AJAX/jQuery.
 
 = 1.0.0 =
@@ -105,13 +105,13 @@ For more information, please click here to view the CalcFusion [FAQ page](http:/
 
 == Upgrade Notice ==
 = 1.1.0 =
-* Fixed an issue on CalcFusionClient class requestService function with POST method parameter. 
-* Added option to pass custom/additional parameter on CalcFusionClient class login function. 
-* Major changes on CalcFusion Setup Page:
+* Fixed an issue on CalcFusionClient class requestService function with POST method parameter
+* Added option to pass custom/additional parameter on CalcFusionClient class login function
+* Major changes on CalcFusion Setup Page
 	- Set password with a non SHA1 value
 	- Change "Test" button label to "Login"
 	- Added Computation Management section
-* Added WP AJAX function "calcfusion_request_service" to be able to trigger a compute from front-end through AJAX/jQuery.
+* Added WP AJAX function "calcfusion_request_service" to be able to trigger a compute from front-end through AJAX/jQuery
 
 = 1.0.0 =
 * Initial release.
