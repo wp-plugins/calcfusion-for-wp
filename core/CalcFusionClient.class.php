@@ -17,7 +17,7 @@ require_once 'ClientTokenGenerator.class.php';
  * The CalcFusionClient class provides methods for processing 
  * OAuth2.0 authentication requests and web service requests.
  * 
- * @version 1.0
+ * @version 1.0.1
  * @since 2014-09-22
  *
  */
@@ -25,8 +25,8 @@ class CalcFusionClient  {
         
     const CONTEXTINFO_PARAM = 'cfxlContextInfo';
 	const CONTEXT = 'PHP';
-	const VERSION = '1.0.0';
-	const FILENAME = 'calcfusion-api-1.0.0.phar';
+	const VERSION = '1.0.1';
+	const FILENAME = 'calcfusion-api-1.0.1.phar';
 
 	const RESPONSE_1010 = 1010;
 	const RESPONSE_1010_MSG = 'Username was not specified. (CF:1010)';
