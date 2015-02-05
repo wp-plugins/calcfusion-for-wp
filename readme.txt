@@ -49,7 +49,7 @@ There are 3 ways you can install the CalcFusion Plugin for Wordpress, each secti
 1. WordPress will then download and install the plugin. Click Activate Plugin to activate it.
 
 ####B. Manual Plugin Installation using WordPress Admin
-This method can be used if you have already downloaded the CalcFusion Plugin in .zip format (click [here](https://downloads.wordpress.org/plugin/calcfusion-for-wp.zip) to download the plugin).
+This method can be used if you have already downloaded the CalcFusion Plugin in .zip format.
 
 1. Login to WordPress Admin.
 1. From the Admin Panel, select Plugins.
@@ -59,7 +59,7 @@ This method can be used if you have already downloaded the CalcFusion Plugin in 
 1. WordPress will then decompress the file and install the plugin. Click Activate Plugin to activate it.
 
 ####C. Manual Plugin Installation using FTP
-This method requires FTP familiarity and can be used if you have already downloaded the CalcFusion Plugin in .zip format (click [here](https://downloads.wordpress.org/plugin/calcfusion-for-wp.zip) to download the plugin).
+This method requires FTP familiarity and can be used if you have already downloaded the CalcFusion Plugin in .zip format.
 
 1. After downloading the .zip file, extract the plugin folder (calcfusion-for-wp) to your desktop.
 1. Login to your WordPress host using an FTP program.
