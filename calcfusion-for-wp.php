@@ -115,7 +115,7 @@ function checkVersionRequired()
 		if($curlSettings != "enabled")
 		{
 			$hasError = true;
-			$message .= '<br>CURL support must set to enabled.';
+			$message .= '<br>CURL support must be set to enabled.';
 		}
 		
 		if($asyncDNS == 'No')
@@ -269,13 +269,14 @@ class CalcFusionSettingsPage
         <div class="wrap">
             <?php screen_icon(); ?>
             <div>
-				<img alt="" src="<?php echo plugin_dir_url( __FILE__ ).'images/CalcFusion_logo.jpg'?>" style="display: inline;">
-				<h2 style="display: inline;"> Setup</h2>
+				<div style="display: inline-block;width: 204px;"><img alt="" src="<?php echo plugin_dir_url( __FILE__ ).'images/CalcFusion_logo.png'?>" style="display: inline;"></div>
+				<div style="display: inline-block;vertical-align: top;padding-top: 18px;"><h2>Setup</h2></div>
 			</div>
 			<h3>CalcFusion for WordPress plugin version <?php echo CALCFUSIONWP_VERSION?></h3>
 			
-			<p>These parameters are available from the Accounts page of the CalcFusion Console.
-			<br>Sign-in to your account to check. If you do not have an account yet, register for a Free Trial now! 
+			<p>These parameters are available from the Accounts page of the <a href="https://console.calcfusion.com" target="_blank">CalcFusion Console</a>.
+			<br>Sign-in to your account to check. If you do not have an account yet, register for a <a href="http://calcfusion.com/trial-registration" target="_blank">Free Trial</a> now! or 
+			<a href="http://calcfusion.com/contact-us" target="_blank">Contact Us</a>. 
 			</p>
             <form method="post" action="options.php">
             <?php
