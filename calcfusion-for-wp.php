@@ -266,8 +266,10 @@ class CalcFusionSettingsPage
 		// Set class property
 		$this->options = get_option( 'calcfusion-wp-options' );
 		?>
+		<div class="wrap">
+			<h2></h2>
+		</div>
         <div class="wrap">
-            <?php screen_icon(); ?>
             <div>
 				<div style="display: inline-block;width: 204px;"><img alt="" src="<?php echo plugin_dir_url( __FILE__ ).'images/CalcFusion_logo.png'?>" style="display: inline;"></div>
 				<div style="display: inline-block;vertical-align: top;padding-top: 18px;"><h2>Setup</h2></div>
@@ -275,7 +277,7 @@ class CalcFusionSettingsPage
 			<h3>CalcFusion for WordPress plugin version <?php echo CALCFUSIONWP_VERSION?></h3>
 			
 			<p>These parameters are available from the Accounts page of the <a href="https://console.calcfusion.com" target="_blank">CalcFusion Console</a>.
-			<br>Sign-in to your account to check. If you do not have an account yet, register for a <a href="http://calcfusion.com/trial-registration" target="_blank">Free Trial</a> now! or 
+			<br>Sign-in to your account to check. If you do not have an account yet, register for a <a href="http://calcfusion.com/trial-registration" target="_blank">Free Trial</a> now or 
 			<a href="http://calcfusion.com/contact-us" target="_blank">Contact Us</a>. 
 			</p>
             <form method="post" action="options.php">
@@ -321,7 +323,7 @@ class CalcFusionSettingsPage
 				<div style="height:10px;"></div>
 				<div style="font-weight: bold;">Download</div>
 				<div style="text-align: left;margin: 0px;vertical-align: bottom;padding: 0px;" disabled>
-					<a href="javascript:onFileDownload();"><img alt="" src="<?php echo plugin_dir_url( __FILE__ ).'images/ico24_download.png'?>"/></a>
+					<a href="javascript:onFileDownload();" disabled><img alt="" src="<?php echo plugin_dir_url( __FILE__ ).'images/ico24_download.png'?>"/></a>
 					<span> Excel File</span>
 				 </div>
 			 </div>
@@ -371,7 +373,7 @@ class CalcFusionSettingsPage
 				{
 					$("#computationList").empty().append("<option value=\"0\">-- Select Computation --</option>");
 					$.each( data.resultList, function( index, dataObj ) {
-						var folderOpt = "<option value=\""+ dataObj.bob_id +"\">"+ encodeStringValue(dataObj.bob_label) +"</option>";
+						var folderOpt = "<option value=\""+ dataObj.bob_id +"\">"+ dataObj.bob_id + " - " + encodeStringValue(dataObj.bob_label) +"</option>";
 						$("#computationList").append(folderOpt);
 					});
 				}
