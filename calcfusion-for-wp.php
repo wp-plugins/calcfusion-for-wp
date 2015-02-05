@@ -3,7 +3,7 @@
 Plugin Name: CalcFusion for WP 
 Plugin URI: http://wordpress.org/plugins/calcfusion-for-wp/
 Description: This plugin makes it simple to add CalcFusion API to your WordPress
-Version: 1.0.0
+Version: 1.1.0
 Author: CalcFusion
 Author URI: http://calcfusion.com
 Text Domain: 
@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 define( "CALCFUSION_CONTEXT_NAME", 'Wordpress' );
 
-define( "CALCFUSIONWP_VERSION", '1.0.0' );
+define( "CALCFUSIONWP_VERSION", '1.1.0' );
 
 define( "CALCFUSIONWP", trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
