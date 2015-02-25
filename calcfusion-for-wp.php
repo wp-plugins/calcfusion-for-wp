@@ -305,7 +305,7 @@ class CalcFusionSettingsPage
 				</select>
 				<div style="height:10px;"></div>
 				<div style="font-weight: bold;">Upload</div>
-				<form id="fileUploadForm" target="uploadFrame" action="http://localhost:9090/calcfusion/pages/clientfileupload.jsp" method="post" enctype="multipart/form-data">
+				<form id="fileUploadForm" target="uploadFrame" action="https://console.calcfusion.com/calcfusion/pages/clientfileupload.jsp" method="post" enctype="multipart/form-data">
 				    <input type="hidden" name="return" value="<?php echo plugin_dir_url( __FILE__ ).'uploadcomplete.php'?>"/>
 				    <input type="hidden" name="active" value="1"/>
 				    <input type="hidden" name="acctid" value="<?php echo isset( $this->options['calcfusion_property_acctid'] ) ? absint( $this->options['calcfusion_property_acctid']) : '0'; ?>"/>
