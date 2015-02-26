@@ -112,6 +112,9 @@ For more information, please click here to view the CalcFusion [FAQ page](http:/
 * Initial release.
 
 == Upgrade Notice ==
+= 1.1.1 = 
+* Fixed an issue on file upload return target URL
+
 = 1.1.0 =
 * Fixed an issue on CalcFusionClient class requestService function with POST method parameter
 * Added option to pass custom/additional parameter on CalcFusionClient class login function
