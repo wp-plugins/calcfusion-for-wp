@@ -350,7 +350,6 @@ class CalcFusionSettingsPage
 							$("#uploadFile").removeAttr("disabled");
 							userId = data.data.clientApp.user.userId;
 							$("#userId").val(userId);
-							$("#userId").val($('#calcfusion_property_acctid').val());
 							
 							getComputationList();
 						}
