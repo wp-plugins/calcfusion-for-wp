@@ -9,5 +9,5 @@ $version = filter_var($_REQUEST["version"], FILTER_VALIDATE_INT);
 $result = filter_var ( trim ( $_REQUEST["result"] ) , FILTER_SANITIZE_STRING );
 ?>
 
-window.parent.inactionFileUploadComplete(<?php echo $folderId?>, <?php echo $version?>, <?php echo '"'.$result.'"'?>);
+window.parent.onFileUploadComplete(<?php echo $folderId?>, <?php echo $version?>, <?php echo '"'.$result.'"'?>);
 </script>
