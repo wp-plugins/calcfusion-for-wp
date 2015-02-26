@@ -3,7 +3,7 @@
 Plugin Name: CalcFusion for WP 
 Plugin URI: http://wordpress.org/plugins/calcfusion-for-wp/
 Description: This plugin makes it simple to add CalcFusion API to your WordPress
-Version: 1.1.0
+Version: 1.1.1
 Author: CalcFusion
 Author URI: http://calcfusion.com
 Text Domain: 
@@ -653,7 +653,6 @@ class CalcFusionSettingsPage
     	if($output)
     	{
 	    	$param = array();
-	    	$param["filterXML"] = "";
 	    	$computationList = $cf_client->requestService("computations/folder/list", "GET", $param);
     	}
     	
@@ -679,12 +678,9 @@ class CalcFusionSettingsPage
     	
     	if($result)
     	{
-    		$_REQUEST["cfxlFrom"]="CFXL";
-    		$_REQUEST["filterXML"]= "<filter><field name=\"cdo_bob_fold_fk\" andor=\"AND\" operator=\"=\" value=\"".$computeID."\"/></filter>";
-    			
     		$param = array();
     		$param["cfxlFrom"]="CFXL";
-    		$param["filterXML"]= "<filter><field name=\"cdo_bob_fold_fk\" andor=\"AND\" operator=\"=\" value=\"".$computeID."\"/></filter>";
+    		$param["computationID"] = $computeID;
     			
     		$result = $cf_client->requestService("computations/file/list", "GET", $param);
     		if($result)
