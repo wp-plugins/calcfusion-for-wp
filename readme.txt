@@ -3,7 +3,7 @@ Contributors: CalcFusion
 Tags: computation engine
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,6 +100,9 @@ For more information, please click here to view the CalcFusion [FAQ page](http:/
 1. CalcFusion Setup Page (under Settings > CalcFusion)
 
 == Changelog ==
+= 1.1.2 = 
+* Modified CalcFusion Setup Page to fix security related issue
+
 = 1.1.1 = 
 * Fixed an issue on file upload return target URL
 
@@ -112,6 +115,9 @@ For more information, please click here to view the CalcFusion [FAQ page](http:/
 * Initial release.
 
 == Upgrade Notice ==
+= 1.1.2 = 
+* Modified CalcFusion Setup Page to fix security related issue
+
 = 1.1.1 = 
 * Fixed an issue on file upload return target URL
 

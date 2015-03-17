@@ -3,7 +3,7 @@
 Plugin Name: CalcFusion for WP 
 Plugin URI: http://wordpress.org/plugins/calcfusion-for-wp/
 Description: This plugin makes it simple to add CalcFusion API to your WordPress
-Version: 1.1.1
+Version: 1.1.2
 Author: CalcFusion
 Author URI: http://calcfusion.com
 Text Domain: 
@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 define( "CALCFUSION_CONTEXT_NAME", 'Wordpress' );
 
-define( "CALCFUSIONWP_VERSION", '1.1.1' );
+define( "CALCFUSIONWP_VERSION", '1.1.2' );
 
 define( "CALCFUSIONWP", trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
@@ -583,7 +583,7 @@ class CalcFusionSettingsPage
     {
     	printf(
     		'<input type="password" id="calcfusion_property_password" style="width: 400px;"  name="calcfusion-wp-options[calcfusion_property_password]" value="%s" maxlength="50"/>',
-    		isset( $this->options['calcfusion_property_password'] ) ? esc_attr( $this->options['calcfusion_property_password']) : ''
+    		isset( $this->options['calcfusion_property_password'] ) ? 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' : ''
     	);
     	printf('<p class="description">Enter your password</p>');
     }
@@ -595,7 +595,7 @@ class CalcFusionSettingsPage
     {
     	printf(
 	    	'<input type="password" id="calcfusion_property_appkey" style="width: 200px;"  name="calcfusion-wp-options[calcfusion_property_appkey]" value="%s" maxlength="30"/>',
-	    	isset( $this->options['calcfusion_property_appkey'] ) ? esc_attr( $this->options['calcfusion_property_appkey']) : ''
+	    	isset( $this->options['calcfusion_property_appkey'] ) ? 'xxxxxxxxxxxxxxxx' : ''
     	);
     }
     
@@ -610,20 +610,36 @@ class CalcFusionSettingsPage
     	);
     }
     
+    private function login_cf_client()
+    {
+    	$accountId = absint($_POST["accountId"]);
+    	$username = sanitize_email($_POST["username"]);
+    	
+    	$password = sanitize_text_field($_POST["password"]);
+    	if($password != "" && $password != sha1('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'))
+    	{
+    		if(!$this->is_sha1($password))
+    			$password = sha1($password);
+    	}
+    	else
+    		$password = CALCFUSIONWP_PASSWORD;
+    	
+    	$appkey = sanitize_text_field($_POST["appkey"]);
+    	if($appkey == "" || $appkey == 'xxxxxxxxxxxxxxxx')
+    		$appkey = CALCFUSIONWP_APPKEY;
+    	
+    	$apiURL = sanitize_text_field($_POST["apiURL"]);
+    	
+    	$this->cf_client = new CalcFusionClient($apiURL);
+    	return $this->cf_client->login($username, $password, $accountId, $appkey);
+    }
+    
     /**
      * WP Ajax Calcfusion login callback function
      */
-    public function calcfusion_action_login() {
-    	
-    	$accountId = absint($_POST["accountId"]);
-    	$username = sanitize_email($_POST["username"]);
-    	$password = sanitize_text_field($_POST["password"]);
-    	$appkey = sanitize_text_field($_POST["appkey"]);
-    	$apiURL = sanitize_text_field($_POST["apiURL"]);
-    
-    	$cf_client = new CalcFusionClient($apiURL);
-    	$output = $cf_client->login($username, $password, $accountId, $appkey);
-    
+    public function calcfusion_action_login() 
+    {
+    	$output = $this->login_cf_client();
     	if($output)
     	{
     		$responseData= json_decode($output, true);
@@ -641,19 +657,11 @@ class CalcFusionSettingsPage
      */
     public function calcfusion_action_computation_list()
     {
-    	$accountId = absint($_POST["accountId"]);
-    	$username = sanitize_email($_POST["username"]);
-    	$password = sanitize_text_field($_POST["password"]);
-    	$appkey = sanitize_text_field($_POST["appkey"]);
-    	$apiURL = sanitize_text_field($_POST["apiURL"]);
-    	
-    	$cf_client = new CalcFusionClient($apiURL);
-    	$output = $cf_client->login($username, $password, $accountId, $appkey);
-    	
+    	$output = $this->login_cf_client();
     	if($output)
     	{
 	    	$param = array();
-	    	$computationList = $cf_client->requestService("computations/folder/list", "GET", $param);
+	    	$computationList = $this->cf_client->requestService("computations/folder/list", "GET", $param);
     	}
     	
     	echo $computationList;
@@ -666,25 +674,21 @@ class CalcFusionSettingsPage
     public function calcfusion_action_download()
     {
     	$accountId = absint($_POST["accountId"]);
-    	$username = sanitize_email($_POST["username"]);
-    	$password = sanitize_text_field($_POST["password"]);
-    	$appkey = sanitize_text_field($_POST["appkey"]);
     	$apiURL = sanitize_text_field($_POST["apiURL"]);
     	$computeID = absint($_POST["computeId"]);
     	$userId = absint($_POST["userId"]);
-    
-    	$cf_client = new CalcFusionClient($apiURL);
-    	$result = $cf_client->login($username, $password, $accountId, $appkey);
     	
+    	$result = $this->login_cf_client();
     	if($result)
     	{
     		$param = array();
     		$param["cfxlFrom"]="CFXL";
     		$param["computationID"] = $computeID;
     			
-    		$result = $cf_client->requestService("computations/file/list", "GET", $param);
+    		$result = $this->cf_client->requestService("computations/file/list", "GET", $param);
     		if($result)
     		{
+    			echo $result;
     			$responseData= json_decode($result, true);
     			$resultList = $responseData["resultList"];
     			$fileId = 0;
@@ -699,7 +703,7 @@ class CalcFusionSettingsPage
     
     			if($fileId != 0)
     			{
-    				$result = $cf_client->requestService("file/request/".$fileId, "GET", $param);
+    				$result = $this->cf_client->requestService("file/request/".$fileId, "GET", $param);
     				if($result)
     				{
     					$resultObj= json_decode($result, true);
