@@ -177,7 +177,7 @@ class CalcFusionClient  {
 		$response = \Httpful\Request::get($host)                  
                       ->sendsJson()                                                  
                       ->expects(\Httpful\Mime::JSON)
-                      ->timeout(10)
+                      ->timeout(60)
                       ->send();                 
                 
 		$status = $response->code;
@@ -309,7 +309,7 @@ class CalcFusionClient  {
                             'DATE' => $requestDate,              
                         ))
 						->expects(\Httpful\Mime::JSON)
-                          ->timeout(10)
+                          ->timeout(60)
                         ->send();
             }else if ($method=="POST"){
                    $response = \Httpful\Request::post($host)                  
@@ -320,7 +320,7 @@ class CalcFusionClient  {
                             'DATE' => $requestDate,             
                         ))
                         ->expects(\Httpful\Mime::JSON)
-                        ->timeout(10)
+                        ->timeout(60)
                         ->send();
             }
            
